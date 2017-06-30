@@ -3,7 +3,6 @@ package com.lucas.lojajogosapi.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.lucas.lojajogosapi.domain.Carrinho;
@@ -34,7 +33,7 @@ public class ItensService implements ItensServiceInterface {
 		Jogo jogo = jogoService.obterPorId(jogo_id);
 		Usuario usuario = usuarioService.obterUsuarioId(user_id);
 		Carrinho carrinho = carrinhoService.obterPorId(usuario.getCarrinho().getId());
-		Item itemNoCarrinho = itensRepository.findByCarrinhoAndProduto(carrinho, jogo);
+		Item itemNoCarrinho = retornaItemNoCarrinho(jogo_id, user_id);
 		try{
 			if( itemNoCarrinho == null){
 				Item item = new Item(jogo,quant, carrinho);		
@@ -57,15 +56,21 @@ public class ItensService implements ItensServiceInterface {
 		carrinho.setTotal(valorTotalCarrinho);
 		carrinhoService.salvar(carrinho);
 	}
-
-	@Override
-	public void deletaDoCarrinho(Long jogo_id, Long user_id) {
+	
+	private Item retornaItemNoCarrinho(Long jogo_id, Long user_id){
 		Jogo jogo = jogoService.obterPorId(jogo_id);
 		Usuario usuario = usuarioService.obterUsuarioId(user_id);
 		Carrinho carrinho = carrinhoService.obterPorId(usuario.getCarrinho().getId());
+		return itensRepository.findByCarrinhoAndProduto(carrinho, jogo);
+	}
+
+	@Override
+	public void deletaDoCarrinho(Long jogo_id, Long user_id) {
+		Item itemNoCarrinho = retornaItemNoCarrinho(jogo_id, user_id);
+		System.out.println(itemNoCarrinho.getId());
 		try{
-			itensRepository.deleteByCarrinhoAndProduto(carrinho, jogo);
-		}catch(EmptyResultDataAccessException e){
+			itensRepository.delete(itemNoCarrinho.getId());
+		}catch(Exception e){
 			throw new JogoNaoEncontradoException("Jogo "+jogo_id+" não encontrado no carrinho do usuário"+user_id);
 		}	
 		

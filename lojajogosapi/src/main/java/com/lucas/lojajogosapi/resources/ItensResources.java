@@ -25,8 +25,8 @@ public class ItensResources {
 	public ResponseEntity<Void> salvar(@PathVariable("user_id") Long user_id, 
 			@PathVariable("jogo_id") Long jogo_id, @PathVariable("quant") Long quant){
 		Item itemSalvo = itensService.insereNoCarrinho(jogo_id, user_id, quant);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-					.path("/{id}").buildAndExpand(itemSalvo.getId()).toUri();
+		URI location = ServletUriComponentsBuilder.fromCurrentServletMapping()
+					.path("/itens/carrinho/{id}").buildAndExpand(itemSalvo.getCarrinho().getId()).toUri();
 		
 		return ResponseEntity.created(location).build();
 		
