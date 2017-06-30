@@ -1,12 +1,12 @@
 package com.lucas.lojajogosapi.resources;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,15 +22,20 @@ public class  CarrinhosResources{
 	@Autowired
 	private CarrinhosServiceInterface carrinhosService;
 	
+	@RequestMapping(method = RequestMethod.GET)
+	public List<Carrinho> listar(){
+		return carrinhosService.obterTodos();
+	}
+	
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> listarCarrinhoUsuario(@PathVariable("id") Long id){
 		Carrinho carrinho = carrinhosService.obterPorId(id);
 		return ResponseEntity.status(HttpStatus.OK).body(carrinho);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> criarCarrinhoUsuario(@RequestBody Carrinho carrinho){
-		Carrinho carrinhoCriado = carrinhosService.criar(carrinho);
+	@RequestMapping(value="/{user_id}", method = RequestMethod.POST)
+	public ResponseEntity<Void> criarCarrinhoUsuario(@PathVariable("user_id") Long user_id){
+		Carrinho carrinhoCriado = carrinhosService.criar(user_id);
 		
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
 					.path("/{id}").buildAndExpand(carrinhoCriado.getId()).toUri();
