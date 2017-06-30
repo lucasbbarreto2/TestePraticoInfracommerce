@@ -32,8 +32,12 @@ public class ItensResources {
 		
 	}
 	
-/*	@RequestMapping(value="/{id}", method = RequestMethod.GET)
-	public */
+	@RequestMapping(value="/{user_id}/{jogo_id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> deletarItemCarrinho(@PathVariable("user_id") Long user_id, 
+			@PathVariable("jogo_id") Long jogo_id){
+		itensService.deletaDoCarrinho(jogo_id, user_id);
+		return ResponseEntity.noContent().build();
+	}
 	
 	@RequestMapping(value="/carrinho/{carrinho_id}", method = RequestMethod.GET)
 	public List<Item> listarItensCarrinho(@PathVariable("carrinho_id") Long carrinho_id){

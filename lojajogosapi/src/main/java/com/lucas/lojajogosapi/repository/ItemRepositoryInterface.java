@@ -11,4 +11,5 @@ import com.lucas.lojajogosapi.domain.Jogo;
 public interface ItemRepositoryInterface extends JpaRepository<Item, Long>{
 	List<Item> findByCarrinho(Carrinho carrinho);
 	Item findByCarrinhoAndProduto(Carrinho carrinho, Jogo produto);
+	void deleteByCarrinhoAndProduto(Carrinho carrinho, Jogo produto);
 }
