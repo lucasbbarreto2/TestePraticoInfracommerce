@@ -29,6 +29,12 @@ public class UsuariosResources {
 		return usuarioService.obterTodos();
 	}
 	
+	@RequestMapping(value="/{user_id}", method = RequestMethod.GET)
+	public ResponseEntity<?> buscarPorId(@PathVariable("user_id") Long user_id){
+		Usuario usuario = usuarioService.obterUsuarioId(user_id);
+		return ResponseEntity.status(HttpStatus.OK).body(usuario);
+	}
+	
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> criarUsuario(@RequestBody Usuario user){
 		

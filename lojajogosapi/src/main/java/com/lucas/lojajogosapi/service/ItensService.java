@@ -10,7 +10,9 @@ import com.lucas.lojajogosapi.domain.Item;
 import com.lucas.lojajogosapi.domain.Jogo;
 import com.lucas.lojajogosapi.domain.Usuario;
 import com.lucas.lojajogosapi.repository.ItemRepositoryInterface;
+import com.lucas.lojajogosapi.service.exceptions.CarrinhoNaoEncontradoException;
 import com.lucas.lojajogosapi.service.exceptions.JogoNaoEncontradoException;
+import com.lucas.lojajogosapi.service.exceptions.UsuarioNaoEncontradoException;
 
 @Service
 public class ItensService implements ItensServiceInterface {
@@ -32,15 +34,15 @@ public class ItensService implements ItensServiceInterface {
 	public Item insereNoCarrinho(Long jogo_id, Long user_id, Long quant) {
 		Jogo jogo = jogoService.obterPorId(jogo_id);
 		if(jogo == null)
-			throw new NullPointerException("Jogo "+jogo_id+" não encontrado "); 
+			throw new JogoNaoEncontradoException("Jogo "+jogo_id+" não encontrado "); 
 		
 		Usuario usuario = usuarioService.obterUsuarioId(user_id);
 		if(usuario == null)
-			throw new NullPointerException("usuario "+user_id+" não encontrado "); 
+			throw new UsuarioNaoEncontradoException("usuario "+user_id+" não encontrado "); 
 		
 		Carrinho carrinho = carrinhoService.obterPorId(usuario.getCarrinho().getId());
 		if(carrinho == null)
-			throw new NullPointerException("carrinho "+usuario.getCarrinho().getId()+" não encontrado "); 
+			throw new CarrinhoNaoEncontradoException("carrinho "+usuario.getCarrinho().getId()+" não encontrado "); 
 		
 		Item itemNoCarrinho = retornaItemNoCarrinho(jogo_id, user_id);
 		try{
@@ -73,11 +75,11 @@ public class ItensService implements ItensServiceInterface {
 		
 		Usuario usuario = usuarioService.obterUsuarioId(user_id);
 		if(usuario == null)
-			throw new NullPointerException("usuario "+user_id+" não encontrado "); 
+			throw new UsuarioNaoEncontradoException("usuario "+user_id+" não encontrado "); 
 		
 		Carrinho carrinho = carrinhoService.obterPorId(usuario.getCarrinho().getId());
 		if(carrinho == null)
-			throw new NullPointerException("carrinho "+usuario.getCarrinho().getId()+" não encontrado ");
+			throw new CarrinhoNaoEncontradoException("carrinho "+usuario.getCarrinho().getId()+" não encontrado ");
 		
 		return itensRepository.findByCarrinhoAndProduto(carrinho, jogo);
 	}
