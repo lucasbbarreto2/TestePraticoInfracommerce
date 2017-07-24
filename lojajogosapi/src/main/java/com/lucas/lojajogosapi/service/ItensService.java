@@ -71,7 +71,7 @@ public class ItensService implements ItensServiceInterface {
 	private Item retornaItemNoCarrinho(Long jogo_id, Long user_id){
 		Jogo jogo = jogoService.obterPorId(jogo_id);
 		if(jogo == null)
-			throw new NullPointerException("Jogo "+jogo_id+" não encontrado "); 
+			throw new JogoNaoEncontradoException("Jogo "+jogo_id+" não encontrado "); 
 		
 		Usuario usuario = usuarioService.obterUsuarioId(user_id);
 		if(usuario == null)
@@ -87,12 +87,19 @@ public class ItensService implements ItensServiceInterface {
 	@Override
 	public void deletaDoCarrinho(Long jogo_id, Long user_id) {
 		Item itemNoCarrinho = retornaItemNoCarrinho(jogo_id, user_id);
-		System.out.println(itemNoCarrinho.getId());
+
+		Carrinho carrinho = carrinhoService.obterPorId(usuarioService.obterUsuarioId(user_id).
+				getCarrinho().getId());
+		if(carrinho == null)
+			throw new CarrinhoNaoEncontradoException("Carrinho não encontrado para o usuário de ID:"+user_id);
+
 		try{
 			itensRepository.delete(itemNoCarrinho.getId());
 		}catch(Exception e){
 			throw new JogoNaoEncontradoException("Jogo "+jogo_id+" não encontrado no carrinho do usuário"+user_id);
-		}	
+		}finally{
+			atualizaTotalCarrinho(carrinho);
+		}
 		
 	}
 

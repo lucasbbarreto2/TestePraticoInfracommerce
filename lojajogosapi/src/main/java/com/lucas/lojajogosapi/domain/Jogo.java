@@ -1,9 +1,12 @@
 package com.lucas.lojajogosapi.domain;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Jogo {
@@ -21,7 +24,10 @@ public class Jogo {
 	private String descricaoLonga;
 	
 	private Double preco;
-
+	
+	@OneToMany(mappedBy = "jogo")
+	private List<Comentarios> comentarios;
+	
 	public Jogo(){}
 	
 	public Jogo(Long id){
@@ -76,6 +82,14 @@ public class Jogo {
 
 	public void setPreco(Double preco) {
 		this.preco = preco;
+	}
+
+	public List<Comentarios> getComentarios() {
+		return comentarios;
+	}
+
+	public void setComentarios(Comentarios comentario) {
+		this.comentarios.add(comentario);
 	}
 	
 }

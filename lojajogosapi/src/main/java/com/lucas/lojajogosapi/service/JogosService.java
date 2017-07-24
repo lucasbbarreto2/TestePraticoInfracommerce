@@ -1,11 +1,15 @@
 package com.lucas.lojajogosapi.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+
+import com.lucas.lojajogosapi.domain.Comentarios;
 import com.lucas.lojajogosapi.domain.Jogo;
+import com.lucas.lojajogosapi.repository.ComentariosRepository;
 import com.lucas.lojajogosapi.repository.JogosRepositoryInterface;
 import com.lucas.lojajogosapi.service.exceptions.JogoNaoEncontradoException;
 
@@ -14,6 +18,9 @@ public class JogosService implements JogosServiceInterface {
 
 	@Autowired
 	private JogosRepositoryInterface jogosRepository;
+	
+	@Autowired
+	private ComentariosRepository comentariosRepository;
 	
 	@Override
 	public List<Jogo> obterTodos() {
@@ -57,4 +64,16 @@ public class JogosService implements JogosServiceInterface {
 		obterPorId(jogo.getId());
 	}
 	
+	@Override
+	public Comentarios inserirComentarios(Long jogo_id, Comentarios comentario){
+		Jogo jogo = obterPorId(jogo_id);
+		comentario.setJogo(jogo);
+		comentario.setData(LocalDateTime.now());
+		return comentariosRepository.save(comentario);
+	}
+	
+	public List<Comentarios> buscarComentarios(Long jogo_id){
+		Jogo jogo = obterPorId(jogo_id);
+		return comentariosRepository.findByJogo(jogo);
+	}
 }
