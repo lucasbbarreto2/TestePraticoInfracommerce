@@ -3,6 +3,8 @@ package com.lucas.lojajogosapi.resources;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +32,7 @@ public class JogosResources {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> salvar(@RequestBody Jogo jogo){
+	public ResponseEntity<Void> salvar(@Valid @RequestBody Jogo jogo){
 		Jogo jogoSalvo = jogosService.salvar(jogo);
 		
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest()

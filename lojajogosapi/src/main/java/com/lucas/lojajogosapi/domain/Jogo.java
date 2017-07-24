@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Jogo {
@@ -15,14 +16,17 @@ public class Jogo {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotNull(message = "O campo Nome não pode ser vazio")
 	private String nome;
 	
+	@NotNull(message = "O campo Plataforma não pode ser vazio")
 	private String pĺataforma;
 	
 	private String categoria;
 	
 	private String descricaoLonga;
 	
+	@NotNull(message = "O campo Preço não pode ser vazio")
 	private Double preco;
 	
 	@OneToMany(mappedBy = "jogo")

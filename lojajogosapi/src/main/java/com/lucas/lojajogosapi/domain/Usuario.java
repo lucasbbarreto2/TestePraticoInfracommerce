@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Usuario {
@@ -15,6 +16,8 @@ public class Usuario {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
+	
+	@NotNull(message = "O campo Nome não pode ser vazio")
 	String nome;
 	
 	@OneToOne(cascade = CascadeType.ALL)
