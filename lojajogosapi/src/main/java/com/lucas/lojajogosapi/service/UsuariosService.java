@@ -9,6 +9,7 @@ import com.lucas.lojajogosapi.domain.Carrinho;
 import com.lucas.lojajogosapi.domain.Usuario;
 import com.lucas.lojajogosapi.repository.CarrinhosRepositoryInterface;
 import com.lucas.lojajogosapi.repository.UsuariosRepositoryInterface;
+import com.lucas.lojajogosapi.service.exceptions.UsuarioJaExistenteException;
 import com.lucas.lojajogosapi.service.exceptions.UsuarioNaoEncontradoException;
 
 @Service
@@ -22,7 +23,12 @@ public class UsuariosService implements UsuariosServiceInterface{
 	
 	@Override
 	public Usuario criar(Usuario usuario) {
-		return usuariosRepository.save(usuario);
+		if(usuario.getId() != null)
+			if(verificaExistencia(usuario.getId()) == null)
+				return usuariosRepository.save(usuario);
+			else
+				throw new UsuarioJaExistenteException("O usuário já exite");
+		return usuario;
 	}
 
 	@Override

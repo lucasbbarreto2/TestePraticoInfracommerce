@@ -27,8 +27,8 @@ public class JogosResources {
 	private JogosServiceInterface jogosService;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public List<Jogo> listar(){
-		return jogosService.obterTodos();
+	public ResponseEntity<List<Jogo>> listar(){
+		return ResponseEntity.status(HttpStatus.OK).body(jogosService.obterTodos());
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)

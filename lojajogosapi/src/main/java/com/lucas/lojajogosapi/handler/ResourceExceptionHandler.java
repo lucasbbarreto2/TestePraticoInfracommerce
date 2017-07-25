@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.lucas.lojajogosapi.domain.DetalhesErro;
 import com.lucas.lojajogosapi.service.exceptions.CarrinhoNaoEncontradoException;
 import com.lucas.lojajogosapi.service.exceptions.JogoNaoEncontradoException;
+import com.lucas.lojajogosapi.service.exceptions.UsuarioJaExistenteException;
 import com.lucas.lojajogosapi.service.exceptions.UsuarioNaoEncontradoException;
 
 @ControllerAdvice
@@ -43,6 +44,16 @@ public class ResourceExceptionHandler {
 				System.currentTimeMillis(), "Tratamento pode ser encontrado em [link para 404]");
 		
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+	}
+	
+	@ExceptionHandler(UsuarioJaExistenteException.class)
+	public ResponseEntity<DetalhesErro> handleUsuarioJaExistenteException
+				(UsuarioJaExistenteException e, HttpServletRequest request){
+		
+		DetalhesErro erro = new DetalhesErro("Usuário já existe em nossa base de dados", 409L, 
+				System.currentTimeMillis(), "Tratamento pode ser encontrado em [link para 409]");
+		
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
 	}
 	
 }

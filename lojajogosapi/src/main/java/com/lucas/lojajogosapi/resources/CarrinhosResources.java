@@ -23,8 +23,8 @@ public class  CarrinhosResources{
 	private CarrinhosServiceInterface carrinhosService;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public List<Carrinho> listar(){
-		return carrinhosService.obterTodos();
+	public ResponseEntity<List<Carrinho>> listar(){
+		return ResponseEntity.status(HttpStatus.OK).body(carrinhosService.obterTodos());
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)

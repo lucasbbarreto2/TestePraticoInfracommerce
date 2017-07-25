@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +41,7 @@ public class ItensResources {
 	}
 	
 	@RequestMapping(value="/carrinho/{carrinho_id}", method = RequestMethod.GET)
-	public List<Item> listarItensCarrinho(@PathVariable("carrinho_id") Long carrinho_id){
-		return itensService.listarItensCarrinho(carrinho_id);
+	public ResponseEntity<List<Item>> listarItensCarrinho(@PathVariable("carrinho_id") Long carrinho_id){
+		return ResponseEntity.status(HttpStatus.OK).body(itensService.listarItensCarrinho(carrinho_id));
 	}
 }

@@ -27,8 +27,8 @@ public class UsuariosResources {
 	private UsuariosServiceInterface usuarioService;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public List<Usuario> listar(){
-		return usuarioService.obterTodos();
+	public ResponseEntity<List<Usuario>> listar(){
+		return ResponseEntity.status(HttpStatus.OK).body(usuarioService.obterTodos());
 	}
 	
 	@RequestMapping(value="/{user_id}", method = RequestMethod.GET)
