@@ -2,10 +2,12 @@ package com.lucas.lojajogosapi.resources;
 
 import java.net.URI;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +36,8 @@ public class UsuariosResources {
 	@RequestMapping(value="/{user_id}", method = RequestMethod.GET)
 	public ResponseEntity<?> buscarPorId(@PathVariable("user_id") Long user_id){
 		Usuario usuario = usuarioService.obterUsuarioId(user_id);
-		return ResponseEntity.status(HttpStatus.OK).body(usuario);
+		CacheControl cache = CacheControl.maxAge(1, TimeUnit.MINUTES);
+		return ResponseEntity.status(HttpStatus.OK).cacheControl(cache).body(usuario);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)

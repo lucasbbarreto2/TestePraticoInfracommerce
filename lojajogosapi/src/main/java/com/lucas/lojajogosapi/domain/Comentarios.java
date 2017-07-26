@@ -9,8 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.FetchType;
 
@@ -30,6 +32,12 @@ public class Comentarios {
 	private Jogo jogo;
 	
 	private String data;
+	
+//	@OneToOne(cascade = CascadeType.ALL)
+//	@JoinColumn(name="USUARIO_ID")
+	@NotEmpty(message = "Necessário insirir comentário")
+	@JsonProperty("comentario")
+	private String usuario;
 	
 	public Comentarios(){}
 	
@@ -76,6 +84,16 @@ public class Comentarios {
 		this.data = data.format(DateTimeFormatter.ofPattern("'Comentário inserido em' EEEE, dd 'de' MMMM 'de' yyyy, 'às' HH:mm"));
 		//
 	}
+
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+
+	
 	
 	
 }

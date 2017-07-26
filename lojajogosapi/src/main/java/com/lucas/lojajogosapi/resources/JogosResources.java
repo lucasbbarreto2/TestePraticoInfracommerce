@@ -2,12 +2,16 @@ package com.lucas.lojajogosapi.resources;
 
 import java.net.URI;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +32,10 @@ public class JogosResources {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Jogo>> listar(){
-		return ResponseEntity.status(HttpStatus.OK).body(jogosService.obterTodos());
+		
+		CacheControl cache = CacheControl.maxAge(1, TimeUnit.MINUTES);
+		
+		return ResponseEntity.status(HttpStatus.OK).cacheControl(cache).body(jogosService.obterTodos());
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
@@ -46,7 +53,8 @@ public class JogosResources {
 	public ResponseEntity<?> buscarPorId(@PathVariable("id") Long id){
 		
 		Jogo jogo = jogosService.obterPorId(id);
-		return ResponseEntity.status(HttpStatus.OK).body(jogo);
+		CacheControl cache = CacheControl.maxAge(1, TimeUnit.MINUTES);
+		return ResponseEntity.status(HttpStatus.OK).cacheControl(cache).body(jogo);
 	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
@@ -68,6 +76,8 @@ public class JogosResources {
 	@RequestMapping(value="/{jogo_id}/comentarios", method=RequestMethod.POST)
 	public ResponseEntity<Void> inserirComentario(@PathVariable("jogo_id") Long jogo_id, 
 			@RequestBody Comentarios comentario){
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		comentario.setUsuario(auth.getName());
 		jogosService.inserirComentarios(jogo_id, comentario);
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
@@ -78,6 +88,7 @@ public class JogosResources {
 	@RequestMapping(value="/{jogo_id}/comentarios", method=RequestMethod.GET)
 	public ResponseEntity<?> buscarComentarios(@PathVariable Long jogo_id){
 		List<Comentarios> comentarios = jogosService.buscarComentarios(jogo_id);
-		return ResponseEntity.status(HttpStatus.OK).body(comentarios);
+		CacheControl cache = CacheControl.maxAge(1, TimeUnit.MINUTES);
+		return ResponseEntity.status(HttpStatus.OK).cacheControl(cache).body(comentarios);
 	}
 }

@@ -2,8 +2,10 @@ package com.lucas.lojajogosapi.resources;
 
 import java.net.URI;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +26,8 @@ public class  CarrinhosResources{
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Carrinho>> listar(){
-		return ResponseEntity.status(HttpStatus.OK).body(carrinhosService.obterTodos());
+		CacheControl cache = CacheControl.maxAge(1, TimeUnit.MINUTES);
+		return ResponseEntity.status(HttpStatus.OK).cacheControl(cache).body(carrinhosService.obterTodos());
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
