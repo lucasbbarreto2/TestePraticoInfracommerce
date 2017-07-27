@@ -24,6 +24,8 @@ public class Comentarios {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; 
 	
+	@NotEmpty(message = "Necessário insirir comentário")
+	@JsonProperty("comentario")
 	private String texto;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -35,8 +37,7 @@ public class Comentarios {
 	
 //	@OneToOne(cascade = CascadeType.ALL)
 //	@JoinColumn(name="USUARIO_ID")
-	@NotEmpty(message = "Necessário insirir comentário")
-	@JsonProperty("comentario")
+	@NotEmpty(message = "Necessário usuário logado para inserir um comentário")
 	private String usuario;
 	
 	public Comentarios(){}

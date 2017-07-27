@@ -4,7 +4,7 @@ $(function() {
 				url:"http://localhost:8080/jogos",
 				type: "get",
 				headers: {
-					"Authorization" : "Basic YWxnYXdvcmtzOnMzbmg"
+					"Authorization" : "Basic bHVjYXNiYmFycmV0bzoxMjM0NQ=="
 				},
 				success: function(response) {
 					desenhaTabela(response);
@@ -23,8 +23,9 @@ $(function() {
  
  function desenhaLinha(linha){
 	 var linhaTabela = $("<tr/>");
+	 $(".js-games-table-body").append(linhaTabela);
 	 linhaTabela.append("<td>" + linha.id + "</td>");
 	 linhaTabela.append("<td>" + linha.nome + "</td>");
 	 linhaTabela.append("<td>" + linha.categoria + "</td>");
-	 linhaTabela.append("<td>" + linha.descricao + "</td>");
+	 linhaTabela.append("<td>" + linha.descricaoLonga + "</td>");
  }
